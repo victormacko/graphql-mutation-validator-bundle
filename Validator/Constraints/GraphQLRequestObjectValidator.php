@@ -20,10 +20,6 @@ Class GraphQLRequestObjectValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\GraphQLRequestObject');
         }
 
-        if($requestObject instanceof RequestObject === false) {
-            throw new \LogicException('Value must be a GraphQL request object');
-        }
-
         /** @var RecursiveValidator $validator */
         $validator = $this->context->getValidator();
         $validatorContext = $validator->inContext($this->context);
