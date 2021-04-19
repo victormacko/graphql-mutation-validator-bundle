@@ -22,7 +22,7 @@
     ]
   },
   "require": {
-    "php": "^7.1",
+    "php": "^7.1||^8.0",
     "overblog/graphql-bundle": "^0.13.1",
     "symfony/validator": "^5.0",
     "doctrine/annotations": "^1.6"
