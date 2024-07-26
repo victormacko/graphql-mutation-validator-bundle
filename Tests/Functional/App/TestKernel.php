@@ -14,11 +14,10 @@ Class TestKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function registerBundles()
+    public function registerBundles(): array
     {
         return [
             new FrameworkBundle(),
-            new TwigBundle(),
             new OverblogGraphQLBundle(),
             new AssoConnectGraphQLMutationValidatorBundle()
         ];
@@ -29,12 +28,12 @@ Class TestKernel extends Kernel
         parent::__construct($environment, $debug);
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return $this->basePath().'cache/'.$this->environment;
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return $this->basePath().'logs';
     }

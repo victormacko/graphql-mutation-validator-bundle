@@ -3,8 +3,6 @@ framework:
     secret: test
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
-    templating:
-        engines: ['twig']
     profiler:
         enabled: false
     validation:
@@ -38,6 +36,3 @@ services:
         autoconfigure: true
         public: false
         resource: "%kernel.root_dir%/*"
-    #disable twig error pages
-    twig.exception_listener:
-        class: stdClass
