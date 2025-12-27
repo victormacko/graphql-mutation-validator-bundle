@@ -7,10 +7,7 @@ use AssoConnect\GraphQLMutationValidatorBundle\Tests\Functional\App\Entity\User;
 use AssoConnect\GraphQLMutationValidatorBundle\Validator\Constraints as AssoConnectAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
-/**
- * @AssoConnectAssert\GraphQLRequestObject()
- */
+#[AssoConnectAssert\GraphQLRequestObject]
 Class NewUserInput extends RequestObject
 {
 
@@ -19,9 +16,7 @@ Class NewUserInput extends RequestObject
      */
     public $username;
 
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank()]
     public $firstname;
 
 }

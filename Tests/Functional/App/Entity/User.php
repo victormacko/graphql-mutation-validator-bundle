@@ -7,9 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 Class User
 {
 
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank()]
     protected $username;
 
 }
