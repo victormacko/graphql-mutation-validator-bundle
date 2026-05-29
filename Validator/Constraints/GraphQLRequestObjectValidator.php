@@ -4,6 +4,7 @@ namespace AssoConnect\GraphQLMutationValidatorBundle\Validator\Constraints;
 
 use AssoConnect\GraphQLMutationValidatorBundle\Input\RequestObject;
 use Doctrine\Common\Annotations\PhpParser;
+use ReflectionProperty;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Validator\RecursiveValidator;
 Class GraphQLRequestObjectValidator extends ConstraintValidator
 {
 
-    public function validate($requestObject, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         // Check instance type
         if($constraint instanceof GraphQLRequestObject === false) {
@@ -24,9 +25,9 @@ Class GraphQLRequestObjectValidator extends ConstraintValidator
         $validator = $this->context->getValidator();
         $validatorContext = $validator->inContext($this->context);
 
-        foreach($requestObject as $field => $value){
+        foreach($value as $field => $objValue){
 
-            $reflectionProperty = new \ReflectionProperty($requestObject, $field);
+            $reflectionProperty = new ReflectionProperty($value, $field);
             if(preg_match('#@see ([a-zA-Z0-9]+)::\$([a-zA-Z0-9]+)#', $reflectionProperty->getDocComment(), $matches)){
 
                 $reflectionClass = new \ReflectionClass($reflectionProperty->getDeclaringClass()->getName());
@@ -47,7 +48,7 @@ Class GraphQLRequestObjectValidator extends ConstraintValidator
 
                 $constraints = $this->getConstraints($class, $property);
 
-                $validatorContext->atPath($field)->validate($value, $constraints);
+                $validatorContext->atPath($field)->validate($objValue, $constraints);
             }
         }
     }
@@ -60,8 +61,10 @@ Class GraphQLRequestObjectValidator extends ConstraintValidator
         // Regular Symfony validation
         /** @var ClassMetadata $metadata */
         $metadata = $validator->getMetadataFor($class);
-        if(array_key_exists($property, $metadata->members)){
-            return $metadata->members[$property][0]->constraints;
+
+        $keys = $metadata->getConstrainedProperties();
+        if(in_array($property, $keys)) {
+            return $metadata->getPropertyMetadata($property)[0]->getConstraints();
         }
 
         return [];
